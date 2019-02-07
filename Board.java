@@ -1,0 +1,146 @@
+class Board {
+    private Occupied[][] Barray = new Occupied[3][3];
+    private State state;
+
+    // --------- Public 'Library' Methods ---------
+
+    Board() {
+        for (int i=0; i<3; i++) {
+            for (int j=0; j<3; j++) {
+                Barray[i][j] = Occupied.Blank;
+            }
+        }
+        state = State.Running;
+    }
+
+    Occupied getPosition(int x, int y) {
+        if (x<0 || y<0 || x>=3 || y>= 3) return Occupied.Fail;
+
+        return Barray[y][x];
+    }
+
+    State updateGetState() {
+        checkStateHorizontal();
+        checkStateVertical();
+        checkStateDiagonal();
+        checkDraw();
+        return state;
+    }
+
+    boolean placePiece(Occupied Piece, int x, int y) {
+        if (Piece != Occupied.O && Piece != Occupied.X) return false;
+        Occupied tryPos = getPosition(x, y);
+        if (tryPos == Occupied.Fail) throw new Error("Invalid location specified");
+        if (tryPos == Occupied.Blank) {
+            Barray[y][x] = Piece;
+            return true;
+        }
+        return false;
+    }
+
+    // --------- Internal Methods ---------
+
+    private void checkStateHorizontal() {
+        for (int i=0; i<3; i++) {
+            if (Barray[i][0] == Barray[i][1] &&
+                Barray[i][1] == Barray[i][2]) {
+                if (Barray[i][0] == Occupied.X) { state = State.XWin; }
+                else if (Barray[i][0] == Occupied.O) { state = State.OWin; }
+            }
+        }
+    }
+
+    private void checkStateVertical() {
+        for (int i=0; i<3; i++) {
+            if (Barray[0][i] == Barray[1][i] &&
+                Barray[1][i] == Barray[2][i]) {
+                if (Barray[0][i] == Occupied.X) { state = State.XWin; }
+                else if (Barray[0][i] == Occupied.O) { state = State.OWin; }
+            }
+        }
+    }
+
+    private void checkStateDiagonal() {
+        if ((Barray[0][0] == Barray[1][1] &&
+            Barray[1][1] == Barray[2][2]) ||
+            (Barray[2][0] == Barray[1][1] &&
+            Barray[1][1] == Barray[0][2])) {
+            if (Barray[1][1] == Occupied.X) { state = State.XWin; }
+            else if (Barray[1][1] == Occupied.O) { state = State.OWin; }
+        }
+    }
+
+    private void checkDraw() {
+        for (int i=0; i<3; i++) {
+            for (int j=0; j<3; j++) {
+                if (Barray[i][j] == Occupied.Blank) return;
+            }
+        }
+
+        if (state == State.Running) state = State.Draw;
+    }
+
+    // --------- Run Methods ---------
+
+    public static void main(String[] args) {
+        Board game = new Board();
+        game.run();
+    }
+
+    private void run() {
+        boolean testing = false;
+        assert(testing = true);
+        if (! testing) throw new Error("Use java -ea Triangle");
+        testInit();
+        testGet();
+        testPlace();
+        testWinState();
+    }
+
+    // --------- Test Suite ---------
+
+    private void testInit() {
+        for (int i=0; i<3; i++) {
+            for (int j=0; j<3; j++) {
+                assert(getPosition(j,i) == Occupied.Blank);
+            }
+        }
+    }
+
+    // Test Invalid Board Positions
+    private void testGet() {
+        assert(getPosition(3, 3) == Occupied.Fail);
+        assert(getPosition(-1, -1) == Occupied.Fail);
+    }
+
+    // Test cases for piece placement
+    private void testPlace() {
+        assert(placePiece(Occupied.O, 0, 0));
+        assert(! placePiece(Occupied.O, 0, 0));
+        assert(! placePiece(Occupied.Blank, 2, 1));
+        assert(! placePiece(Occupied.Fail, 2, 1));
+    }
+
+    private void testWinState() {
+        Barray[0][0] = Barray[0][1] = Barray[0][2] = Occupied.X;
+        assert(updateGetState() == State.XWin);
+        Barray[0][0] = Barray[1][1] = Barray[2][2] = Occupied.O;
+        assert(updateGetState() == State.OWin);
+        state = State.Running;
+        Barray[1][0] = Barray[2][1] = Barray[0][2] = Occupied.O;
+        Barray[1][2] = Barray[2][0] = Barray[2][2] = Occupied.X;
+        state = updateGetState();
+        assert(state == State.Draw);
+        debugDisplay();
+    }
+
+    void debugDisplay() {
+        for (int i=0; i<3; i++) {
+            for (int j=0; j<3; j++) {
+                System.out.print(Barray[i][j]);
+            }
+            System.out.print('\n');
+        }
+    }
+
+}
