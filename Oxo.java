@@ -1,10 +1,12 @@
 /* Print out the classification of a triangle, given three integer lengths
 given on the command line. With no arguments, run the unit tests. */
 
-class Controller {
+import java.io.*;
+
+class Oxo {
 
     public static void main(String[] args) {
-        Controller program = new Controller();
+        Oxo program = new Oxo();
         program.run(args);
     }
 
@@ -20,8 +22,8 @@ class Controller {
     // Give a usage message and shut down.
     void usage() {
         System.err.println("Use:");
-        System.err.println("  java -ea Controller");
-        System.err.println("  java Controller A1");
+        System.err.println("  java -ea Oxo");
+        System.err.println("  java Oxo A1");
         System.exit(1);
     }
 
@@ -29,17 +31,30 @@ class Controller {
     int[] convert(String s) {
         int[] pos = {-1,-1};
         if (s.length() != 2) { return pos; }
-        try { pos[1] = Integer.parseInt(s.substring(1)) ; }
+        try { pos[1] = Integer.parseInt(s.substring(1)) - 1 ; }
         catch (Exception err) { return pos; }
-        pos[0] = 1;
+        if ( Character.isLetter(s.charAt(0)) ) {
+            pos[0] = Character.toUpperCase(s.charAt(0)) - 'A';
+        }
         return pos;
     }
 
     // ---------- Testing ----------
 
     // Run the tests
-    void test() {
-
+    private void test() {
+        testConvert();
     }
 
+    private void testConvert() {
+        int[] pos;
+        pos = convert("A1");
+        assert(pos[0] == 0);
+        pos = convert("D4");
+        assert(pos[0] == 3);
+        pos = convert("A1SDA");
+        assert(pos[0] == -1);
+        pos = convert("b2");
+        assert(pos[0] == 1);
+    }
 }
