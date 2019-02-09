@@ -1,7 +1,7 @@
 /* Print out the classification of a triangle, given three integer lengths
 given on the command line. With no arguments, run the unit tests. */
 
-import java.io.*;
+import java.util.*;
 
 class Oxo {
 
@@ -23,7 +23,7 @@ class Oxo {
     void usage() {
         System.err.println("Use:");
         System.err.println("  java -ea Oxo");
-        System.err.println("  java Oxo A1");
+        System.err.println("  java Oxo X");
         System.exit(1);
     }
 
@@ -37,6 +37,12 @@ class Oxo {
             pos[0] = Character.toUpperCase(s.charAt(0)) - 'A';
         }
         return pos;
+    }
+
+    void reader() {
+        Scanner clReader = new Scanner(System.in);
+
+        for int
     }
 
     // ---------- Testing ----------

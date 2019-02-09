@@ -1,16 +1,18 @@
 class Board {
     private Occupied[][] Barray = new Occupied[3][3];
     private State state;
+    private Occupied Piece;
 
     // --------- Public 'Library' Methods ---------
 
-    Board() {
+    Board(Occupied Piece0) {
         for (int i=0; i<3; i++) {
             for (int j=0; j<3; j++) {
                 Barray[i][j] = Occupied.Blank;
             }
         }
         state = State.Running;
+        Piece = Piece0;
     }
 
     Occupied getPosition(int x, int y) {
@@ -27,12 +29,13 @@ class Board {
         return state;
     }
 
-    boolean placePiece(Occupied Piece, int x, int y) {
-        if (Piece != Occupied.O && Piece != Occupied.X) return false;
+    boolean placePiece(int x, int y) {
         Occupied tryPos = getPosition(x, y);
-        if (tryPos == Occupied.Fail) throw new Error("Invalid location specified");
+        if (tryPos == Occupied.Fail) return false;
         if (tryPos == Occupied.Blank) {
             Barray[y][x] = Piece;
+            if (Piece == Occupied.O) { Piece = Occupied.X; }
+            else if (Piece == Occupied.X) { Piece = Occupied.O; }
             return true;
         }
         return false;
@@ -83,7 +86,7 @@ class Board {
     // --------- Run Methods ---------
 
     public static void main(String[] args) {
-        Board game = new Board();
+        Board game = new Board(Occupied.O);
         game.run();
     }
 
@@ -115,10 +118,10 @@ class Board {
 
     // Test cases for piece placement
     private void testPlace() {
-        assert(placePiece(Occupied.O, 0, 0));
-        assert(! placePiece(Occupied.O, 0, 0));
-        assert(! placePiece(Occupied.Blank, 2, 1));
-        assert(! placePiece(Occupied.Fail, 2, 1));
+        assert(placePiece(0, 0));
+        assert(! placePiece(0, 0));
+        assert(! placePiece(4, 1));
+        assert(! placePiece(2, 3));
     }
 
     private void testWinState() {
