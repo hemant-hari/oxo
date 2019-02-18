@@ -1,5 +1,4 @@
-/* Print out the classification of a triangle, given three integer lengths
-given on the command line. With no arguments, run the unit tests. */
+/* Run this version to play against a perfect AI with it playing first */
 
 import java.util.*;
 

@@ -1,4 +1,9 @@
-class Board implements Cloneable {
+/*  Board class for Tic-Tac-Toe game. It has an internal array that stores
+    the current game state in a board and has functions to place pieces
+    as well as check the game state to see if it has reached a terminal
+    state. */
+
+class Board {
     private Occupied[][] Barray = new Occupied[3][3];
     private State state;
     private Occupied Piece;

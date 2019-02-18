@@ -1,3 +1,6 @@
+/* Tic-Tac-Toe Playing AI made using a minimax algorithm */
+
+
 class Ai {
     private Board initBoard;
     private int[][] scores = new int[3][3];

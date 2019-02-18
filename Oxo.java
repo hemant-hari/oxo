@@ -1,5 +1,6 @@
-/* Print out the classification of a triangle, given three integer lengths
-given on the command line. With no arguments, run the unit tests. */
+/*  Main controller class for Tic-Tac-Toe program. Controls I/O from user
+    and implements the main game loop. Game loop continues until a terminal
+    state is reached. */
 
 import java.util.*;
 
