@@ -3,10 +3,10 @@ given on the command line. With no arguments, run the unit tests. */
 
 import java.util.*;
 
-class Oxo {
+class AiOxo {
 
     public static void main(String[] args) {
-        Oxo program = new Oxo();
+        AiOxo program = new AiOxo();
         program.run(args);
     }
 
@@ -49,17 +49,30 @@ class Oxo {
         Board gameBoard = new Board(Piece);
         String input = new String();
         Display output = new Display(gameBoard);
+        Ai comp = new Ai(gameBoard, getAi(Piece));
+        int[] pos;
         while (gameBoard.updateGetState() == State.Running) {
-            System.out.print("Input position to place piece ");
-            System.out.print(gameBoard.getCurrentPiece() + ": ");
-            int[] pos = convert(reader.nextLine());
-            if (gameBoard.placePiece(pos[0], pos[1]) == false) {
-                System.out.println("Invalid location specified, try again") ;
+            if (gameBoard.getCurrentPiece() == Piece){
+                pos = comp.makeMove();
+                System.out.println(pos[0] + "" + pos[1]);
+                gameBoard.placePiece(pos[0], pos[1]);
+            }
+            else{
+                System.out.print("Input position to place piece ");
+                System.out.print(gameBoard.getCurrentPiece() + "  ");
+                pos = convert(reader.nextLine());
+                if (gameBoard.placePiece(pos[0], pos[1]) == false) {
+                    System.out.println("Invalid location specified, try again") ;
+                }
             }
             output.updateDisplay();
         }
 
         System.out.println(gameBoard.updateGetState());
+    }
+
+    State getAi(Occupied Piece) {
+        return (Piece == Occupied.O) ? State.OWin : State.XWin;
     }
 
     // ---------- Testing ----------
