@@ -1,9 +1,7 @@
-class Board {
+class Board implements Cloneable {
     private Occupied[][] Barray = new Occupied[3][3];
     private State state;
     private Occupied Piece;
-
-    // --------- Public 'Library' Methods ---------
 
     Board(Occupied Piece0) {
         for (int i=0; i<3; i++) {
@@ -13,6 +11,16 @@ class Board {
         }
         state = State.Running;
         Piece = Piece0;
+    }
+
+    // --------- Public 'Library' Methods ---------
+
+    Occupied getCurrentPiece() {
+        return Piece;
+    }
+
+    Occupied[][] getCurrentBoard() {
+        return Barray;
     }
 
     Occupied getPosition(int x, int y) {
@@ -31,7 +39,7 @@ class Board {
 
     boolean placePiece(int x, int y) {
         Occupied tryPos = getPosition(x, y);
-        if (tryPos == Occupied.Fail) return false;
+        if (tryPos == Occupied.Fail) return false ;
         if (tryPos == Occupied.Blank) {
             Barray[y][x] = Piece;
             if (Piece == Occupied.O) { Piece = Occupied.X; }
@@ -39,6 +47,15 @@ class Board {
             return true;
         }
         return false;
+    }
+
+    //Use with Caution! No checking for undoing only last move!!
+    void undo(int x, int y) {
+        if (Piece != Occupied.Blank){
+            Piece = (Piece == Occupied.X) ? Occupied.O : Occupied.X;
+        }
+        Barray[y][x] = Occupied.Blank;
+        if (state != State.Running) {state = State.Running;}
     }
 
     // --------- Internal Methods ---------

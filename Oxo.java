@@ -14,8 +14,8 @@ class Oxo {
     void run(String[] args) {
         boolean testing = false;
         assert(testing = true);
-        if (args.length == 0 && testing) test();
-        else if (args.length == 1) ;
+        if (args.length == 0 && testing) test() ;
+        else if (args.length == 1) init(args) ;
         else usage();
     }
 
@@ -23,7 +23,7 @@ class Oxo {
     void usage() {
         System.err.println("Use:");
         System.err.println("  java -ea Oxo");
-        System.err.println("  java Oxo X");
+        System.err.println("  java Oxo FIRSTPIECE // where firstpiece can be X or O");
         System.exit(1);
     }
 
@@ -39,10 +39,27 @@ class Oxo {
         return pos;
     }
 
-    void reader() {
-        Scanner clReader = new Scanner(System.in);
+    void init(String[] args) {
+        if (args[0].equals("X")) { play(Occupied.X); }
+        else if (args[0].equals("O")) { play(Occupied.O); }
+    }
 
-        for int
+    void play(Occupied Piece) {
+        Scanner reader = new Scanner(System.in);
+        Board gameBoard = new Board(Piece);
+        String input = new String();
+        Display output = new Display(gameBoard);
+        while (gameBoard.updateGetState() == State.Running) {
+            System.out.print("Input position to place piece ");
+            System.out.print(gameBoard.getCurrentPiece() + "  ");
+            int[] pos = convert(reader.nextLine());
+            if (gameBoard.placePiece(pos[0], pos[1]) == false) {
+                System.out.println("Invalid location specified, try again") ;
+            }
+            output.updateDisplay();
+        }
+
+        System.out.println(gameBoard.updateGetState());
     }
 
     // ---------- Testing ----------

@@ -1,4 +1,4 @@
-default: Board
+default: Oxo
 
 %: %.java
 	javac $@.java
